@@ -16,6 +16,11 @@ type Usuario struct {
 	CreadoEn time.Time
 }
 
+type LoginDto struct {
+	User string `json:"usuario" validate:"required,min=4,max=13"`
+	Pwd  string `json:"clave" validate:"required,min=8,max=18"`
+}
+
 type UsuarioDto struct {
 	Id    uuid.UUID `json:"id"`
 	User  string    `json:"usuario" validate:"required,min=4,max=13"`

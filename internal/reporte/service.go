@@ -1,8 +1,6 @@
 package reporte
 
 import (
-	"log"
-
 	"github.com/google/uuid"
 	regen "github.com/zach-klippenstein/goregen"
 	"gorm.io/gorm"
@@ -48,12 +46,13 @@ func (srv *ReporteServiceImpl) CreateReport(entidadId uuid.UUID, curps []string)
 
 func (srv *ReporteServiceImpl) Generate(quantity int) ([]string, error) {
 	var rgs []string
-	pttr := "^[A-Z][AEIOUX][A-Z]{2}\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\\d]\\d$"
+	pttr := `^[A-Z]{1}[AEIOUX]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CH|CH|CL|CM|CS|DF|DG|GR|GT|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$`
+	//pttr := `^[A-Z][AEIOUX][A-Z]{2}\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])[HM](AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]\\d$`
 	i := 0
 	for i < quantity {
 		str, err := regen.Generate(pttr)
 		if err != nil {
-			log.Fatalf("Error")
+			return nil, err
 		} else {
 			rgs = append(rgs, str)
 		}

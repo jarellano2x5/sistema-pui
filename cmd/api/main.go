@@ -8,6 +8,7 @@ import (
 	"github.com/jarellano2x5/finance-go/config"
 	"github.com/jarellano2x5/finance-go/database"
 	"github.com/jarellano2x5/finance-go/internal/middleware"
+	"github.com/jarellano2x5/finance-go/internal/reporte"
 	"github.com/jarellano2x5/finance-go/internal/usuario"
 )
 
@@ -32,17 +33,22 @@ func main() {
 		})
 	})
 	// implements
-	usrp := usuario.NewUsuarioStore(database.DB)
-	ussr := usuario.NewUsuarioService(usrp)
-	ushn := usuario.NewUsuarioHandler(ussr)
+	usuSer := usuario.NewUsuarioService(database.DB)
+	usuHand := usuario.NewUsuarioHandler(usuSer)
+	repSer := reporte.NewReporteService(database.DB)
+	repHand := reporte.NewReporteHandler(repSer)
 	// define routes
 	v1 := app.Group("/api")
 	{
+		v1.Post("/login", usuHand.PostLogin)
 		users := v1.Group("/users")
-		users.Get("/", ushn.GetUsuario)
-		//users.Get("/:id", handlers.GetId)
-		users.Post("/", ushn.PostUsuario)
-		users.Put("/", ushn.PutUsuario)
+		users.Post("/register", usuHand.PostRegister)
+		users.Delete("/cancel", middleware.Protected(), usuHand.Delete)
+		repos := v1.Group("/reportes", middleware.Protected())
+		repos.Get("/", repHand.GetReportes)
+		repos.Get("/generar/:cant", repHand.GetGenerados)
+		repos.Post("/", repHand.PostReporte)
+
 	}
 	// server init
 	addr := fmt.Sprintf(":%s", cfg.AppPort)

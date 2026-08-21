@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
+	"github.com/jarellano2x5/finance-go/internal/utils"
 )
 
 type ReporteHandler interface {
@@ -22,10 +22,10 @@ func NewReporteHandler(srv ReporteService) ReporteHandler {
 }
 
 func (h *ReporteHandlerImpl) GetReportes(c *fiber.Ctx) error {
-	id, err := uuid.Parse(c.Params("id"))
+	id, err := utils.GetUserId(c)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"param": "id is required",
+			"error": err.Error(),
 		})
 	}
 	ls, err := h.srv.GetAll(id)
@@ -45,14 +45,19 @@ func (h *ReporteHandlerImpl) GetGenerados(c *fiber.Ctx) error {
 		})
 	}
 	ls, err := h.srv.Generate(qn)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"param": err,
+		})
+	}
 	return c.Status(fiber.StatusOK).JSON(ls)
 }
 
 func (h *ReporteHandlerImpl) PostReporte(c *fiber.Ctx) error {
-	id, err := uuid.Parse(c.Params("id"))
+	id, err := utils.GetUserId(c)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"param": "id is required",
+			"param": err.Error(),
 		})
 	}
 	var curps []string

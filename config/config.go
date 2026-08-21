@@ -14,6 +14,7 @@ type Config struct {
 	DBPwrd  string
 	DBName  string
 	AppPort string
+	JwtScrt string
 }
 
 func LoadConfig() *Config {
@@ -28,6 +29,7 @@ func LoadConfig() *Config {
 		DBPwrd:  getEnv("DB_PWRD", "postgres"),
 		DBName:  getEnv("DB_NAME", "finance"),
 		AppPort: getEnv("APP_PORT", "3000"),
+		JwtScrt: getEnv("JWT_SCRT", "ponele_algo_829817230481$&%"),
 	}
 }
 
