@@ -19,6 +19,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/gofiber/schema v1.8.3 // indirect
 	github.com/gofiber/utils/v2 v2.4.1 // indirect
 	github.com/google/gxui v0.0.0-20151028112939-f85e0a97b3a4 // indirect
@@ -32,6 +33,9 @@ require (
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
+	github.com/oaswrap/spec v0.5.2 // indirect
+	github.com/oaswrap/spec-ui v0.2.1 // indirect
+	github.com/oaswrap/spec/adapter/fiberv3openapi v0.5.2 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/smartystreets/goconvey v1.8.1 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
