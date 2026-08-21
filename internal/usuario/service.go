@@ -8,7 +8,7 @@ import (
 
 type UsuarioService interface {
 	GetAll() ([]SignDto, error)
-	CreateUser(dto UsuarioDto) error
+	CreateUser(dto UsuarioDto) (SignDto, error)
 	RepairUser(dto UsuarioDto) error
 }
 
@@ -32,14 +32,17 @@ func (s *UsuarioServiceImpl) GetAll() ([]SignDto, error) {
 	return ld, nil
 }
 
-func (s *UsuarioServiceImpl) CreateUser(dto UsuarioDto) error {
+func (s *UsuarioServiceImpl) CreateUser(dto UsuarioDto) (SignDto, error) {
 	mod := &Usuario{
 		Id: uuid.New(), User: dto.User,
 		Pwd: dto.Pwd, Url: dto.Url,
 		Expwd: dto.Expwd, Activo: true,
 		CreadoEn: time.Now(),
 	}
-	return s.sto.Insert(mod)
+	if err := s.sto.Insert(mod); err != nil {
+		return SignDto{}, err
+	}
+	return ToSignDto(*mod), nil
 }
 
 func (s *UsuarioServiceImpl) RepairUser(dto UsuarioDto) error {

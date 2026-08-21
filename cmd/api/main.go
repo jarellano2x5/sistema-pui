@@ -36,7 +36,7 @@ func main() {
 	ussr := usuario.NewUsuarioService(usrp)
 	ushn := usuario.NewUsuarioHandler(ussr)
 	// define routes
-	v1 := app.Group("/api/v1")
+	v1 := app.Group("/api")
 	{
 		users := v1.Group("/users")
 		users.Get("/", ushn.GetUsuario)

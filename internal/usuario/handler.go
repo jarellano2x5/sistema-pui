@@ -1,6 +1,13 @@
 package usuario
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"fmt"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
+)
+
+var validate = validator.New()
 
 type UsuarioHandler interface {
 	GetUsuario(c *fiber.Ctx) error
@@ -34,18 +41,22 @@ func (h *UsuarioHandlerImpl) PostUsuario(c *fiber.Ctx) error {
 			"error": "invalid request body",
 		})
 	}
-	if errors := req.Validate(); len(errors) > 0 {
+	if err := validate.Struct(req); err != nil {
+		ers := make(map[string]string)
+		for _, err := range err.(validator.ValidationErrors) {
+			ers[err.Field()] = fmt.Sprintf("failed on '%s' rule", err.Tag())
+		}
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
-			"errors": errors,
+			"errors": ers,
 		})
 	}
-	res := h.srv.CreateUser(*req)
+	dto, res := h.srv.CreateUser(*req)
 	if res != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "failed to create usuario",
 		})
 	}
-	return c.Status(fiber.StatusCreated).JSON(req)
+	return c.Status(fiber.StatusCreated).JSON(dto)
 }
 
 func (h *UsuarioHandlerImpl) PutUsuario(c *fiber.Ctx) error {
