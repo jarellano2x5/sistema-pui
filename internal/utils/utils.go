@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
 )
 
@@ -13,7 +13,7 @@ func ErrorPanic(err error) {
 	}
 }
 
-func GetUserId(c *fiber.Ctx) (uuid.UUID, error) {
+func GetUserId(c fiber.Ctx) (uuid.UUID, error) {
 	raw := c.Locals("user_id")
 	str, ok := raw.(string)
 	if !ok {

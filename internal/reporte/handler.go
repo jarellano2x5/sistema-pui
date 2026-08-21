@@ -3,14 +3,14 @@ package reporte
 import (
 	"strconv"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/jarellano2x5/finance-go/internal/utils"
 )
 
 type ReporteHandler interface {
-	GetReportes(c *fiber.Ctx) error
-	GetGenerados(c *fiber.Ctx) error
-	PostReporte(c *fiber.Ctx) error
+	GetReportes(c fiber.Ctx) error
+	GetGenerados(c fiber.Ctx) error
+	PostReporte(c fiber.Ctx) error
 }
 
 type ReporteHandlerImpl struct {
@@ -21,7 +21,7 @@ func NewReporteHandler(srv ReporteService) ReporteHandler {
 	return &ReporteHandlerImpl{srv}
 }
 
-func (h *ReporteHandlerImpl) GetReportes(c *fiber.Ctx) error {
+func (h *ReporteHandlerImpl) GetReportes(c fiber.Ctx) error {
 	id, err := utils.GetUserId(c)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -32,7 +32,7 @@ func (h *ReporteHandlerImpl) GetReportes(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(ls)
 }
 
-func (h *ReporteHandlerImpl) GetGenerados(c *fiber.Ctx) error {
+func (h *ReporteHandlerImpl) GetGenerados(c fiber.Ctx) error {
 	qn, err := strconv.Atoi(c.Params("cant"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -53,7 +53,7 @@ func (h *ReporteHandlerImpl) GetGenerados(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(ls)
 }
 
-func (h *ReporteHandlerImpl) PostReporte(c *fiber.Ctx) error {
+func (h *ReporteHandlerImpl) PostReporte(c fiber.Ctx) error {
 	id, err := utils.GetUserId(c)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -61,7 +61,7 @@ func (h *ReporteHandlerImpl) PostReporte(c *fiber.Ctx) error {
 		})
 	}
 	var curps []string
-	if err = c.BodyParser(&curps); err != nil {
+	if err = c.Bind().Body(&curps); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"body": "curp lists",
 		})

@@ -4,16 +4,16 @@ import (
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/jarellano2x5/finance-go/internal/utils"
 )
 
 var validate = validator.New()
 
 type UsuarioHandler interface {
-	PostLogin(c *fiber.Ctx) error
-	PostRegister(c *fiber.Ctx) error
-	Delete(c *fiber.Ctx) error
+	PostLogin(c fiber.Ctx) error
+	PostRegister(c fiber.Ctx) error
+	Delete(c fiber.Ctx) error
 }
 
 type UsuarioHandlerImpl struct {
@@ -24,9 +24,9 @@ func NewUsuarioHandler(srv UsuarioService) UsuarioHandler {
 	return &UsuarioHandlerImpl{srv}
 }
 
-func (h *UsuarioHandlerImpl) PostLogin(c *fiber.Ctx) error {
+func (h *UsuarioHandlerImpl) PostLogin(c fiber.Ctx) error {
 	req := new(LoginDto)
-	if err := c.BodyParser(&req); err != nil {
+	if err := c.Bind().Body(&req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "invalid request body",
 		})
@@ -56,9 +56,9 @@ func (h *UsuarioHandlerImpl) PostLogin(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(reg)
 }
 
-func (h *UsuarioHandlerImpl) PostRegister(c *fiber.Ctx) error {
+func (h *UsuarioHandlerImpl) PostRegister(c fiber.Ctx) error {
 	req := new(UsuarioDto)
-	if err := c.BodyParser(req); err != nil {
+	if err := c.Bind().Body(req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "invalid request body",
 		})
@@ -88,7 +88,7 @@ func (h *UsuarioHandlerImpl) PostRegister(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(reg)
 }
 
-func (h *UsuarioHandlerImpl) Delete(c *fiber.Ctx) error {
+func (h *UsuarioHandlerImpl) Delete(c fiber.Ctx) error {
 	id, err := utils.GetUserId(c)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

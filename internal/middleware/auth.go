@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/jarellano2x5/finance-go/internal/utils"
 )
 
 func Protected() fiber.Handler {
-	return func(c *fiber.Ctx) error {
+	return func(c fiber.Ctx) error {
 		head := c.Get("Authorization")
 		if head == "" || !strings.HasPrefix(head, "Bearer ") {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

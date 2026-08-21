@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/jarellano2x5/finance-go/config"
 	"github.com/jarellano2x5/finance-go/database"
 	"github.com/jarellano2x5/finance-go/internal/middleware"
@@ -26,7 +26,7 @@ func main() {
 	// middleware initialization
 	middleware.SetupMiddleware(app)
 	// checking health
-	app.Get("/health", func(c *fiber.Ctx) error {
+	app.Get("/health", func(c fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"status":  "ok",
 			"service": "finance-api",
@@ -56,7 +56,7 @@ func main() {
 	log.Fatal(app.Listen(addr))
 }
 
-func customErrorHandler(c *fiber.Ctx, err error) error {
+func customErrorHandler(c fiber.Ctx, err error) error {
 	code := fiber.StatusInternalServerError
 
 	if e, ok := err.(*fiber.Error); ok {
