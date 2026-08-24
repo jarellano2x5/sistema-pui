@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
+	responses "github.com/jarellano2x5/finance-go/internal"
 	"github.com/jarellano2x5/finance-go/internal/utils"
 )
 
@@ -101,7 +102,7 @@ func (h *UsuarioHandlerImpl) Delete(c fiber.Ctx) error {
 			"error": "failed to cancel subscription",
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"action": "subscription cancelled!",
+	return c.Status(fiber.StatusOK).JSON(responses.Response{
+		Message: "Coincidencia recibida correctamente",
 	})
 }

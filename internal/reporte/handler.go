@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v3"
+	responses "github.com/jarellano2x5/finance-go/internal"
 	"github.com/jarellano2x5/finance-go/internal/utils"
 )
 
@@ -72,7 +73,7 @@ func (h *ReporteHandlerImpl) PostReporte(c fiber.Ctx) error {
 			"body": err,
 		})
 	}
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"success": true,
+	return c.Status(fiber.StatusCreated).JSON(responses.Response{
+		Message: "Reporte creado",
 	})
 }

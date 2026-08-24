@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
+	responses "github.com/jarellano2x5/finance-go/internal"
 )
 
 var validate = validator.New()
@@ -43,8 +44,8 @@ func (h *SolicitudHandlerImpl) PostNotificar(c fiber.Ctx) error {
 			"error": err,
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Coincidencia recibida correctamente",
+	return c.Status(fiber.StatusOK).JSON(responses.Response{
+		Message: "Coincidencia recibida correctamente",
 	})
 }
 
@@ -69,7 +70,7 @@ func (h *SolicitudHandlerImpl) PostCerrar(c fiber.Ctx) error {
 			"error": err,
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Coincidencia recibida correctamente",
+	return c.Status(fiber.StatusOK).JSON(responses.Response{
+		Message: "Coincidencia recibida correctamente",
 	})
 }
