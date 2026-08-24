@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/gofiber/fiber/v3"
@@ -24,7 +23,6 @@ func Protected() fiber.Handler {
 			})
 		}
 		c.Locals("user_id", claims["user_id"])
-		fmt.Printf("######## %s", claims["user_id"])
 		return c.Next()
 	}
 }

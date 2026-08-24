@@ -12,6 +12,7 @@ type Reporte struct {
 	Curp      string    `gorm:"size:18;not null"`
 	Fecha     time.Time
 	UsuarioId uuid.UUID `gorm:"type:uuid;not null"` //;REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE"`
+	Cierre    time.Time
 }
 
 type ReporteDto struct {
