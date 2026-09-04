@@ -104,6 +104,12 @@ func main() {
 			option.Response(200, new([]string)),
 			option.Security("bearerAuth"),
 		)
+		rp.Patch("/", repHand.GetConectar).With(
+			option.Summary("Envía registros"),
+			option.Description("Envía los registro a la entidad diversa"),
+			option.Response(200, new([]string)),
+			option.Security("bearerAuth"),
+		)
 		rp.Post("/", repHand.PostReporte).With(
 			option.Summary("Registra reportes"),
 			option.Description("Registra los CURPs en reportes"),

@@ -6,6 +6,7 @@ import (
 
 	"github.com/jarellano2x5/finance-go/config"
 	"github.com/jarellano2x5/finance-go/internal/reporte"
+	"github.com/jarellano2x5/finance-go/internal/solicitud"
 	"github.com/jarellano2x5/finance-go/internal/usuario"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -29,7 +30,7 @@ func Connect(cfg *config.Config) {
 	}
 	log.Println("database connected successfully")
 
-	err = DB.AutoMigrate(&usuario.Usuario{}, &reporte.Reporte{})
+	err = DB.AutoMigrate(&usuario.Usuario{}, &reporte.Reporte{}, &solicitud.Solicitud{})
 	if err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
 	}

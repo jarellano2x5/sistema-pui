@@ -94,7 +94,7 @@ func ToSolicitud(dto SolicitudDto) (Solicitud, error) {
 	if err != nil {
 		log.Fatalf("failed to parse UUID: %v", err)
 	}
-	pub, err := uuid.Parse(dto.Id[38:])
+	pub, err := uuid.Parse(dto.Id[37:])
 	if err != nil {
 		log.Fatalf("failed to parse pub UUID: %v", err)
 	}
@@ -144,7 +144,7 @@ func ToCierre(dto CierreDto) (Cierre, error) {
 	if err != nil {
 		log.Fatalf("failed to parse UUID: %v", err)
 	}
-	pub, err := uuid.Parse(dto.Id[38:])
+	pub, err := uuid.Parse(dto.Id[37:])
 	if err != nil {
 		log.Fatalf("failed to parse pub UUID: %v", err)
 	}
