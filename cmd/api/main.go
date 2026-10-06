@@ -80,6 +80,12 @@ func main() {
 			option.Request(new(usuario.UsuarioDto)),
 			option.Response(200, new(usuario.TokenDto)),
 		)
+		v1.Post("/login", usuHand.PostLogin).With(
+			option.Summary("Ingresa en esta plataforma"),
+			option.Description("Utiliza usuario con contraseña y regresa un token"),
+			option.Request(new(usuario.LoginDto)),
+			option.Response(200, new(usuario.TokenDto)),
+		)
 		v1.Delete("/", middleware.Protected(), usuHand.Delete).With(
 			option.Summary("Baja de esta plataforma"),
 			option.Description("Permite eliminar al usuario"),
