@@ -18,6 +18,8 @@ type Reporte struct {
 type ReporteDto struct {
 	Id    string `json:"required"`
 	Curp  string `json:"curp" validate:"required,min=18,max=18"`
+	Sexo  string `json:"sexo_asignado"`
+	Nac   string `json:"fecha_nacimiento"`
 	Fecha time.Time
 }
 
@@ -52,10 +54,14 @@ type TknX struct {
 }
 
 func ToReporteDto(m Reporte) ReporteDto {
+	var sex string = m.Curp[10:11]
+	var fnc string = "20" + m.Curp[4:6] + "-" + m.Curp[6:8] + "-" + m.Curp[8:10]
 	return ReporteDto{
 		Id:    strings.Join([]string{m.Id.String(), m.UsuarioId.String()}, "-"),
 		Curp:  m.Curp,
 		Fecha: m.Fecha,
+		Sexo:  sex,
+		Nac:   fnc,
 	}
 }
 
@@ -71,16 +77,18 @@ func ToReporteString(curp string, entidadId uuid.UUID) Reporte {
 func ToSolicitudMinDto(m Reporte) SolicitudMinDto {
 	var f string
 	f = m.Fecha.Format("2006-01-02")
+	var sex string = m.Curp[10:11]
+	var fnc string = "20" + m.Curp[4:6] + "-" + m.Curp[6:8] + "-" + m.Curp[8:10]
 	return SolicitudMinDto{
 		Id:                 strings.Join([]string{m.Id.String(), m.UsuarioId.String()}, "-"),
 		Curp:               m.Curp,
 		Nombre:             nil,
 		PrimerApellido:     nil,
 		SegundoApellido:    nil,
-		FechaNacimiento:    nil,
+		FechaNacimiento:    &fnc,
 		FechaDesaparicion:  &f,
 		LugarNacimiento:    GetLugar(m.Curp[11:13]),
-		SexoAsignado:       nil,
+		SexoAsignado:       &sex,
 		Telefono:           nil,
 		Correo:             nil,
 		Direccion:          nil,

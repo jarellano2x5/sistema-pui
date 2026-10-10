@@ -94,7 +94,9 @@ func (srv *ReporteServiceImpl) SendReport(id uuid.UUID) error {
 		return err
 	}
 	for _, r := range mods {
-		ers := SendRpte(ToSolicitudMinDto(r), u.Url, auth.Tkn)
+		env := ToSolicitudMinDto(r)
+		fmt.Printf("%+v\n", env)
+		ers := SendRpte(env, u.Url, auth.Tkn)
 		if ers != nil {
 			return ers
 		}

@@ -1,6 +1,7 @@
 package solicitud
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/jarellano2x5/finance-go/internal/reporte"
@@ -21,6 +22,7 @@ func NewSolicitudService(db *gorm.DB) SolicitudService {
 }
 
 func (srv *SolicitudServiceImpl) Notificar(dto SolicitudDto) error {
+	fmt.Printf("%+v\n", dto)
 	mod, err := ToSolicitud(dto)
 	if err != nil {
 		return err

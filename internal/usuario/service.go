@@ -54,14 +54,14 @@ func (s *UsuarioServiceImpl) Register(dto UsuarioDto) (SignDto, error) {
 	if err != nil {
 		return SignDto{}, err
 	}
-	mod := &Usuario{
+	mod := Usuario{
 		Id: uuid.New(), User: dto.User,
 		Pwd: hsh, Url: dto.Url,
 		Expwd: dto.Expwd, Activo: true,
 		CreadoEn: time.Now(),
 	}
-	if err := s.db.Create(mod); err != nil {
-		return SignDto{}, err.Error
+	if err := s.db.Create(&mod).Error; err != nil {
+		return SignDto{}, err
 	}
 	reg := SignDto{
 		Id: mod.Id, User: mod.User,

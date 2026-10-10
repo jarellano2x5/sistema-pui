@@ -1,6 +1,7 @@
 package solicitud
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -77,7 +78,7 @@ type SolicitudDto struct {
 	FormatoHuellas         string   `json:"formato_huellas" validate:"max=50"`
 	InstitucionId          string   `json:"institucion_id" validate:"min=4,max=13"`
 	TipoEvento             string   `json:"tipo_evento" validate:"max=500"`
-	FechaEvento            string   `json:"fecha_evento" validate:"len=10"`
+	FechaEvento            *string  `json:"fecha_evento" required:"false"`
 	DescripcionLugarEvento string   `json:"descripcion_lugar_evento" validate:"max=500"`
 	DireccionEvento        string   `json:"direccion_evento" validate:"max=500"`
 	FaseBusqueda           string   `json:"fase_busqueda" validate:"required,len=1"`
@@ -100,11 +101,15 @@ func ToSolicitud(dto SolicitudDto) (Solicitud, error) {
 	}
 	fn, err := time.Parse(ly, dto.FechaNacimiento)
 	if err != nil {
-		log.Fatalf("failed to parse fnac UUID: %v", err)
+		log.Fatalf("failed to parse fnac: %v", err)
 	}
-	fe, err := time.Parse(ly, dto.FechaEvento)
-	if err != nil {
-		log.Fatalf("failed to parse feve UUID: %v", err)
+	var fe time.Time
+	fmt.Printf("%+v\n", dto.FechaEvento)
+	if dto.FechaEvento != nil {
+		fe, err = time.Parse(ly, *dto.FechaEvento)
+		if err != nil {
+			log.Fatalf("failed to parse feve: %v", err)
+		}
 	}
 	return Solicitud{
 		Id:                     id,
@@ -115,7 +120,7 @@ func ToSolicitud(dto SolicitudDto) (Solicitud, error) {
 		SegundoApellido:        dto.SegundoApellido,
 		FechaNacimiento:        fn,
 		LugarNacimiento:        dto.LugarNacimiento,
-		SexoAsignado:           dto.SegundoApellido,
+		SexoAsignado:           dto.SexoAsignado,
 		Telefono:               dto.Telefono,
 		Correo:                 dto.Correo,
 		Direccion:              dto.Direccion,
