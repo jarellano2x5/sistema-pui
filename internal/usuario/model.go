@@ -22,11 +22,10 @@ type LoginDto struct {
 }
 
 type UsuarioDto struct {
-	//	Id    uuid.UUID `json:"id"`
-	User  string `json:"usuario" validate:"required,min=4,max=13"`
-	Pwd   string `json:"password" validate:"required,min=8,max=18"`
+	User  string `json:"institucion_id" validate:"required,min=4,max=13"`
+	Pwd   string `json:"clave" validate:"required,min=8,max=18"`
 	Url   string `json:"url" validate:"required,min=20,max=200"`
-	Expwd string `json:"ex_password" validate:"required,min=8,max=20"`
+	Expwd string `json:"clave_pui" validate:"required,min=8,max=20"`
 }
 
 type SignDto struct {

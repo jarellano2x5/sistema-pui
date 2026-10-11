@@ -5,14 +5,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jarellano2x5/finance-go/internal/usuario"
 )
 
 type Reporte struct {
 	Id        uuid.UUID `gorm:"type:uuid;primaryKey"`
 	Curp      string    `gorm:"size:18;not null"`
 	Fecha     time.Time
-	UsuarioId uuid.UUID `gorm:"type:uuid;not null"` //;REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE"`
-	Cierre    time.Time
+	UsuarioId uuid.UUID       `gorm:"type:uuid;not null"`
+	Usuario   usuario.Usuario `gorm:"foreignKey:UsuarioId"`
 }
 
 type ReporteDto struct {
@@ -74,13 +75,13 @@ func ToReporteString(curp string, entidadId uuid.UUID) Reporte {
 	}
 }
 
-func ToSolicitudMinDto(m Reporte) SolicitudMinDto {
+func ToSolicitudMinDto(m Reporte, p uuid.UUID) SolicitudMinDto {
 	var f string
 	f = m.Fecha.Format("2006-01-02")
 	var sex string = m.Curp[10:11]
 	var fnc string = "20" + m.Curp[4:6] + "-" + m.Curp[6:8] + "-" + m.Curp[8:10]
 	return SolicitudMinDto{
-		Id:                 strings.Join([]string{m.Id.String(), m.UsuarioId.String()}, "-"),
+		Id:                 strings.Join([]string{m.Id.String(), p.String()}, "-"),
 		Curp:               m.Curp,
 		Nombre:             nil,
 		PrimerApellido:     nil,

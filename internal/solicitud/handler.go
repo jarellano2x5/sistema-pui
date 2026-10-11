@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
 	responses "github.com/jarellano2x5/finance-go/internal"
+	"github.com/jarellano2x5/finance-go/internal/utils"
 )
 
 var validate = validator.New()
@@ -13,6 +14,7 @@ var validate = validator.New()
 type SolicitudHandler interface {
 	PostNotificar(c fiber.Ctx) error
 	PostCerrar(c fiber.Ctx) error
+	GetConectar(c fiber.Ctx) error
 }
 
 type SolicitudHandlerImpl struct {
@@ -72,5 +74,23 @@ func (h *SolicitudHandlerImpl) PostCerrar(c fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(responses.Response{
 		Message: "Coincidencia recibida correctamente",
+	})
+}
+
+func (h *SolicitudHandlerImpl) GetConectar(c fiber.Ctx) error {
+	id, err := utils.GetUserId(c)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"param": err.Error(),
+		})
+	}
+	err = h.srv.SendReport(id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(responses.Response{
+			Message: err.Error(),
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(responses.Response{
+		Message: "Terminado",
 	})
 }

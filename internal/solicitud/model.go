@@ -6,12 +6,22 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jarellano2x5/finance-go/internal/reporte"
 )
 
 type Huellas struct {
 	Rone  string `json:"rone"`
 	Rtwo  string `json:"rtwo"`
 	Lpalm string `json:"lpalm"`
+}
+
+type Envio struct {
+	Id      uuid.UUID `gorm:"type:uuid;primaryKey"`
+	Pub     uuid.UUID `gorm:"type:uuid;primaryKey"` // REFERENCES Reportes(id) ON DELETE CASCADE ON UPDATE CASCADE
+	Curp    string    `gorm:"size:18;not null"`
+	Envio   time.Time
+	Cierre  time.Time
+	Reporte reporte.Reporte `gorm:"foreignKey:Id;references:Id;constraint:-"`
 }
 
 type Solicitud struct {
@@ -42,8 +52,9 @@ type Solicitud struct {
 	FechaEvento            time.Time
 	DescripcionLugarEvento string `gorm:"size:500"`
 	DireccionEvento        string `gorm:"size:500"`
-	FaseBusqueda           string `gorm:"size:1"`
+	FaseBusqueda           string `gorm:"size:1;primaryKey"`
 	Fecha                  time.Time
+	Envio                  Envio `gorm:"foreignKey:Id,Pub;References:Id,Pub;constraint:-"`
 }
 
 type Cierre struct {
@@ -87,6 +98,15 @@ type SolicitudDto struct {
 type CierreDto struct {
 	Id            string `json:"id" validate:"required,min=36,max=75"`
 	InstitucionId string `json:"institucion_id" validate:"required,min=4,max=13"`
+}
+
+func ToEnvio(dto reporte.Reporte) Envio {
+	return Envio{
+		Id:    dto.Id,
+		Pub:   uuid.New(),
+		Curp:  dto.Curp,
+		Envio: time.Now(),
+	}
 }
 
 func ToSolicitud(dto SolicitudDto) (Solicitud, error) {
